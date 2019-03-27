@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Empresas
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar placeholder="Type to filter the name column..." (keyup)='updateFilter($event)'></ion-searchbar>
+  <ngx-datatable #table class='material' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+    [rowHeight]="'auto'" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size" [rows]='rows'
+    [externalPaging]="true" (page)='setPage($event)'>
+    <ngx-datatable-column name="Name" prop="name" sortable="true"></ngx-datatable-column>
+    <ngx-datatable-column name="Gender" prop="gender" sortable="true"></ngx-datatable-column>
+    <ngx-datatable-column name="Age" prop="age" sortable="true"></ngx-datatable-column>
+    <ngx-datatable-column name="Actions" sortable="false"  prop="name">
+      <ng-template  let-row="row" let-value="value" ngx-datatable-cell-template>
+        <ion-button (click)="edit(row)">
+          <ion-icon slot="icon-only" name="ios-create"></ion-icon>
+        </ion-button>
+
+        <ion-button (click)="delete(row)">
+          <ion-icon slot="icon-only" name="ios-trash"></ion-icon>
+        </ion-button>
+
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</ion-content>

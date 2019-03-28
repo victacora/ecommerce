@@ -62,7 +62,6 @@ export class ListCompanyPage implements OnInit {
     });
 
     return await modal.present();
-
   }
 
   async delete(company) {
@@ -90,6 +89,24 @@ export class ListCompanyPage implements OnInit {
       closeButtonText: 'Aceptar'
     });
     toast.present();
+  }
+
+  async createCompany() {
+    const modal = await this.modalController.create({
+      component: DialogCompanyPage
+    });
+    modal.onDidDismiss().then((result: any) => {
+      const response = result.data;
+      if (isBoolean(response)) {
+        if (response) {
+          this.setPage({ offset: this.table.page, filter: '' });
+        }
+        this.showOperationResult(response);
+      }
+    });
+
+    return await modal.present();
+
   }
 
 }

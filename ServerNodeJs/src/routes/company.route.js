@@ -35,13 +35,14 @@ router.put('/api/company/', (req, resp) => {
         return res.status(400).send('Request body is missing')
     }
 
-    CompanyModel.update({
-            nit: req.body.nit
+    CompanyModel.updateOne({
+            id_: req.body.id_
         }, req.body)
         .then(company => {
-            res.json(company)
+            resp.json(company)
         })
         .catch(err => {
+            console.log('Error '+err);
             resp.status(500).json(err)
         })
 })
@@ -52,7 +53,7 @@ router.delete('/api/company/:nit', (req, resp) => {
         return res.status(400).send('Missing URL parameter: nit')
     }
 
-    CustomerModel.findOneAndRemove({
+    CustomerModel.deleteOne({
             nit: req.params.nit
         })
         .then(company => {

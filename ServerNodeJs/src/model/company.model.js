@@ -2,7 +2,7 @@ let mongoose = require('mongoose')
 let mongoConstants = require('../shared/resources/mongo-constants')
 let connectionString=`mongodb+srv://${mongoConstants.USER}:${mongoConstants.PASSWORD}@${mongoConstants.SERVER}/${mongoConstants.DATABASE}?retryWrites=true`;
 
-mongoose.connect(connectionString,{useNewUrlParser: true});
+mongoose.connect(connectionString,{useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true});
 
 var db = mongoose.connection;
 

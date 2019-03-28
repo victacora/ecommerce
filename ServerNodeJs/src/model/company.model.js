@@ -1,21 +1,32 @@
 let mongoose = require('mongoose')
 let mongoConstants = require('../shared/resources/mongo-constants')
+let connectionString=`mongodb+srv://${mongoConstants.USER}:${mongoConstants.PASSWORD}@${mongoConstants.SERVER}/${mongoConstants.DATABASE}?retryWrites=true`;
 
-mongoose.connect(`mongodb+srv://${mongoConstants.USER}:${mongoConstants.PASSWORD}@${mongoConstants.SERVER}/${mongoConstants.DATABASE}?retryWrites=true`)
+mongoose.connect(connectionString,{useNewUrlParser: true});
+
+var db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', function() {
+  console.info('MongoDB connect success')
+});
 
 let CompanySchema = new mongoose.Schema({
   name: String,
   nit: {
     type: Number,
     required: true,
-    unique: true
+    unique: true, 
+    min: 0 
   },
   movil: {
     type: Number,
-    required: true
+    required: true,
+    min: 0 
   },
   phone: {
-    type: Number
+    type: Number,
+     min: 0 
   },
   street: {
     type: String,

@@ -1,12 +1,14 @@
 let express = require('express')
 let path = require('path')
 let bodyParser = require('body-parser')
+var cors = require('cors');
 
 let app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.use(cors()); 
 
 let companyRoute = require('./routes/company.route')
 
@@ -15,7 +17,9 @@ app.use(companyRoute)
 
 app.use((req, res, next) => {
     console.log(`${new Date().toString()} => ${req.originalUrl}`, req.body)
-    next()
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
 })
 
 app.use(express.static('public'))

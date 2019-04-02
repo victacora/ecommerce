@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  UrlServer: '/api',
+  UrlServer: 'http://localhost:3000/api',
   auth0Config: {
     clientID: '6ffEDYqJCoQtXeHngfMbdJpMJxiIgiEo',
     domain: 'xm-dev.auth0.com',

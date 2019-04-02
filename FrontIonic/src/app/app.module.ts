@@ -11,6 +11,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { CompanyService } from './shared/service/company.service';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoaderProvider } from './shared/service/loader.service';
+import { HttpInterceptor } from './shared/service/http-interceptor.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,7 +29,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    CompanyService
+    CompanyService,
+    LoaderProvider,
+    HttpInterceptor
   ],
   bootstrap: [AppComponent]
 })

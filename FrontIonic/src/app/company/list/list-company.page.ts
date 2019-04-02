@@ -19,6 +19,7 @@ export class ListCompanyPage implements OnInit {
 
   page = new Page();
 
+  filter = '';
 
   @ViewChild(DatatableComponent) table: DatatableComponent;
 
@@ -29,17 +30,22 @@ export class ListCompanyPage implements OnInit {
     this.page = new Page();
   }
 
-  updateFilter(filter) {
-    this.setPage({ offset: 0, filter: filter });
+  updateFilter() {
+    this.setPage({ offset: 0, filter: (this.filter === '' ? '-' : this.filter) });
+  }
+
+  clearFilter() {
+    this.filter = '';
+    this.setPage({ offset: 0, filter: '-' });
   }
 
   ngOnInit() {
-    this.setPage({ offset: 0, filter: '' });
+    this.setPage({ offset: 0, filter: '-' });
   }
 
   setPage(pageInfo) {
     this.page.pageNumber = pageInfo.offset;
-    this.page.filter = pageInfo.filter;
+    this.page.filter = !pageInfo.filter ? '-' : pageInfo.filter;
     this.companyService.getCompanies(this.page).subscribe(pagedData => {
       this.page = pagedData.page;
       this.rows = pagedData.data;
@@ -55,7 +61,7 @@ export class ListCompanyPage implements OnInit {
       const response = result.data;
       if (isBoolean(response)) {
         if (response) {
-          this.setPage({ offset: this.table.page, filter: '' });
+          this.setPage({ offset: this.page.pageNumber, filter: (this.filter === '' ? '-' : this.filter) });
         }
         this.showOperationResult(response);
       }
@@ -72,8 +78,15 @@ export class ListCompanyPage implements OnInit {
         'Cancelar', {
           text: 'Aceptar',
           handler: _ => {
-            this.companyService.deleteCompany(company.id).subscribe(
-              result => this.showOperationResult(result),
+            this.companyService.deleteCompany(company._id).subscribe(
+              result => {
+                if (isBoolean(result)) {
+                  if (result) {
+                    this.setPage({ offset: this.page.pageNumber, filter: (this.filter === '' ? '-' : this.filter) });
+                  }
+                  this.showOperationResult(result);
+                }
+              },
               error => this.showOperationResult(false));
           }
         }]
@@ -85,6 +98,7 @@ export class ListCompanyPage implements OnInit {
     const toast = await this.toastController.create({
       message: result ? 'Operación realizada con éxito' : 'Ocurrió un error procesando la petición',
       showCloseButton: true,
+      duration: 1500,
       position: 'top',
       closeButtonText: 'Aceptar'
     });
@@ -99,14 +113,12 @@ export class ListCompanyPage implements OnInit {
       const response = result.data;
       if (isBoolean(response)) {
         if (response) {
-          this.setPage({ offset: this.table.page, filter: '' });
+          this.setPage({ offset: this.page.pageNumber, filter: (this.filter === '' ? '-' : this.filter) });
         }
         this.showOperationResult(response);
       }
     });
-
     return await modal.present();
-
   }
 
 }

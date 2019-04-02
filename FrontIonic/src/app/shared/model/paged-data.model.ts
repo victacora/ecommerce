@@ -1,6 +1,6 @@
 import {Page} from './page.model';
 
-export class PagedData<T> {
-    data = new Array<T>();
+export class PagedData {
+    data = new Array();
     page = new Page();
 }

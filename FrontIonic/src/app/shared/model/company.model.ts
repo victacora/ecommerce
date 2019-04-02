@@ -1,6 +1,8 @@
 export class Company {
+    _id: string;
     name: string;
-    gender: string;
-    company: string;
-    age: number;
+    nit: string;
+    movil: number;
+    phone: number;
+    street: string;
 }

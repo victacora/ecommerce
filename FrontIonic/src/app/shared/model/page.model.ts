@@ -3,10 +3,10 @@ export class Page {
     totalElements = 0;
     totalPages = 0;
     pageNumber = 0;
-    filter = '';
+    filter = '-';
 
     constructor() {
         this.pageNumber = 0;
-        this.size = 20;
+        this.size = 10;
     }
 }

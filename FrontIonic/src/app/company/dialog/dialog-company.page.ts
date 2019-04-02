@@ -24,24 +24,36 @@ export class DialogCompanyPage {
     this.company = navParams.get('company');
     this.companyForm = formBuilder.group({
       name: [(this.company ? this.company.name : ''), Validators.required],
-      nit: [(this.company ? this.company.name : ''), Validators.required],
-      phone: [(this.company ? this.company.name : '')],
-      cell: [(this.company ? this.company.name : ''), Validators.required]
+      nit: [(this.company ? this.company.nit : ''), Validators.required],
+      phone: [(this.company ? this.company.phone : '')],
+      movil: [(this.company ? this.company.movil : ''), Validators.required],
+      street: [(this.company ? this.company.street : ''), Validators.required]
     });
   }
 
   save() {
-    this.companyService.saveCompany(this.getCompany(this.companyForm)).subscribe(
-      result => this.modalCtrl.dismiss(true),
-      error => this.modalCtrl.dismiss(false),
-    );
+    if (this.company) {
+      this.companyService.updateCompany(this.getCompany(this.companyForm)).subscribe(
+        result => this.modalCtrl.dismiss(true),
+        error => this.modalCtrl.dismiss(false),
+      );
+    } else {
+      this.companyService.saveCompany(this.getCompany(this.companyForm)).subscribe(
+        result => this.modalCtrl.dismiss(true),
+        error => this.modalCtrl.dismiss(false),
+      );
+    }
+
   }
 
   getCompany(companyForm: FormGroup) {
     this.company = this.company ? this.company : new Company();
+    this.company._id = this.company ? this.company._id : '';
     this.company.name = companyForm.value.name;
-    this.company.name = companyForm.value.name;
-    this.company.name = companyForm.value.name;
+    this.company.nit = companyForm.value.nit;
+    this.company.phone = companyForm.value.phone;
+    this.company.movil = companyForm.value.movil;
+    this.company.street = companyForm.value.street;
     return this.company;
   }
 

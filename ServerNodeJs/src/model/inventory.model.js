@@ -15,8 +15,56 @@ db.once('open', function () {
   console.info('MongoDB connect success')
 });
 
+let PersonSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    default: ''
+  },
+  surname: {
+    type: String,
+    required: true,
+    default: ''
+  },
+  typeDocument: {
+    type: String,
+    required: true,
+    default: ''
+  },
+  dni: {
+    type: String,
+    required: true,
+    default: ''
+  },
+  movil: {
+    type: Number,
+    required: true,
+    min: 0
+  },
+  phone: {
+    type: Number,
+    min: 0
+  },
+  street: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  typeUser: {
+    type: [String],
+    required: true
+  }
+})
+
 let CompanySchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    required: true,
+    default: ''
+  },
   nit: {
     type: String,
     required: true,
@@ -35,6 +83,11 @@ let CompanySchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  persons: {
+    type: [PersonSchema]
+  }
 })
 
-module.exports = mongoose.model('Company', CompanySchema)
+module.exports = {
+  CompanyModel: mongoose.model('Company', CompanySchema)
+}

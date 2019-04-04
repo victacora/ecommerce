@@ -13,6 +13,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderProvider } from './shared/service/loader.service';
 import { HttpInterceptor } from './shared/service/http-interceptor.service';
+import { PersonService } from './shared/service/person.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,9 +31,10 @@ import { HttpInterceptor } from './shared/service/http-interceptor.service';
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     CompanyService,
+    PersonService,
     LoaderProvider,
     HttpInterceptor
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

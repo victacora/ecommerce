@@ -1,12 +1,13 @@
 let express = require('express')
 let router = express.Router()
-let CompanyModel = require('../model/inventory.model')
+let CompanyModel = require('../model/company.model')
 
-router.get('/api/company/:page_no/:page_size/:filter', (req, resp) => {
+router.get('/api/person/:page_no/:page_size/:filter/:id_company', (req, resp) => {
 
     const per_page = parseInt(req.params.page_size) || 10
     const page_no = parseInt(req.params.page_no) || 0
     const filter = req.params.filter;
+    const id_company = req.params.id_company
 
     const filterCondition = filter !== '-' ? {
         $or: [{
@@ -16,14 +17,25 @@ router.get('/api/company/:page_no/:page_size/:filter', (req, resp) => {
                 }
             },
             {
-                nit: {
+                dni: {
                     $regex: filter,
                     $options: 'i'
                 }
             }
         ]
-    } : {};
+    } : { persons: { $elemMatch: {  } }, name: 1 };
 
+    CompanyModel.findById(id_company)
+        .populate({
+            path: 'persons',
+            select: filterCondition
+        })
+        .exec(
+            function (err, company) {
+                if (err) res.status(500).send(err);
+
+                res.json(company.users);
+            });
 
     CompanyModel.countDocuments(filterCondition).then(
         totalResult => {
@@ -55,7 +67,7 @@ router.post('/api/company/', (req, resp) => {
         return res.status(400).send('Request body is missing')
     }
 
-    CompanyModel.create(req.body)
+    CompanyModel.create(req.body.person)
         .then(company => {
             if (!company || company.length === 0) {
                 return resp.status(500).send(company)
@@ -74,7 +86,7 @@ router.put('/api/company/', (req, resp) => {
     }
 
     CompanyModel.updateOne({
-            _id: req.body._id
+            _id: req.body.person._id
         }, req.body)
         .then(company => {
             resp.json(company)
@@ -86,8 +98,8 @@ router.put('/api/company/', (req, resp) => {
 })
 
 
-router.delete('/api/company/:id', (req, resp) => {
-    if (!req.params.id) {
+router.delete('/api/company/:id/:id_company', (req, resp) => {
+    if (!req.params.id && !req.params.id_company) {
         return res.status(400).send('Missing URL parameter: id')
     }
     CompanyModel.deleteOne({

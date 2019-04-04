@@ -105,7 +105,7 @@ export class ListCompanyPage implements OnInit {
     toast.present();
   }
 
-  async createCompany() {
+  async create() {
     const modal = await this.modalController.create({
       component: DialogCompanyPage
     });

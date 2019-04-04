@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { CompanyService } from 'src/app/shared/service/company.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ModalController, NavParams } from '@ionic/angular';

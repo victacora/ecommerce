@@ -1,27 +1,44 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
     <ion-title>
       Personas
     </ion-title>
+    <ion-buttons slot="primary">
+      <ion-button color="primary" fill="solid" expand="block" (click)="create()">
+        <ion-icon slot="start" name="add"></ion-icon>
+        Agregar
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let item of items">
-      <ion-icon [name]="item.icon" slot="start"></ion-icon>
-      {{item.title}}
-      <div class="item-note" slot="end">
-        {{item.note}}
-      </div>
-    </ion-item>
-  </ion-list>
-  <!--
-    <div *ngIf="selectedItem" padding>
-      You navigated here from <b>{{selectedItem.title }}</b>
-    </div>
-  -->
+  <ion-item class="searchbar-input-container sc-ion-searchbar-md">
+    <ion-input  [(ngModel)]="filter"
+      placeholder="Buscar por nombre o documento..." type="text"></ion-input>
+    <ion-button (click)="updateFilter()" end>
+      <ion-icon name="search"></ion-icon>
+    </ion-button>
+    <ion-button (click)="clearFilter()" end>
+        <ion-icon name="ios-refresh"></ion-icon>
+      </ion-button>
+  </ion-item>
+  <ngx-datatable #table class='material' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+    [rowHeight]="'auto'" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size" [rows]='rows'
+    [externalPaging]="true" (page)='setPage($event)'>
+    <ngx-datatable-column name="Nombre" prop="name" sortable="true"></ngx-datatable-column>
+    <ngx-datatable-column name="Apellidos" prop="surname" sortable="true"></ngx-datatable-column>
+    <ngx-datatable-column name="Documento" prop="dni" sortable="true"></ngx-datatable-column>
+    <ngx-datatable-column name="Dirección" prop="street" sortable="true"></ngx-datatable-column>
+    <ngx-datatable-column name="Acciones" sortable="false" prop="id_">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <ion-button (click)="edit(row)">
+          <ion-icon slot="icon-only" name="ios-create"></ion-icon>
+        </ion-button>
+        <ion-button (click)="delete(row)">
+          <ion-icon slot="icon-only" name="ios-trash"></ion-icon>
+        </ion-button>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
 </ion-content>

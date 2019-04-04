@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { PagedData } from '../model/paged-data.model';
 import { Company } from '../model/company.model';
 import { Page } from '../model/page.model';
@@ -25,7 +24,7 @@ export class CompanyService {
         return this.http.put(URLCompany, company);
     }
 
-    public deleteCompany(companyId: String): Observable<boolean> {
-        return this.http.delete(`${URLCompany}${companyId}`);
+    public deleteCompany(id: String): Observable<boolean> {
+        return this.http.delete(`${URLCompany}${id}`);
     }
 }

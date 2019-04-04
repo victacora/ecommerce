@@ -11,8 +11,10 @@ app.use(bodyParser.urlencoded({
 app.use(cors()); 
 
 let companyRoute = require('./routes/company.route')
+let personRoute = require('./routes/person.route')
 
 app.use(companyRoute)
+app.use(personRoute)
 
 
 app.use((req, res, next) => {
@@ -26,13 +28,14 @@ app.use(express.static('public'))
 
 // Handler for 404 - Resource Not Found
 app.use((req, res, next) => {
-    res.sendFile(path.join(__dirname, '../public/404.html'))
+    console.error(req.path)
+    res.status(404).sendFile(path.join(__dirname, '../public/404.html'))
 })
 
 // Handler for Error 500
 app.use((err, req, res, next) => {
     console.error(err.stack)
-    res.sendFile(path.join(__dirname, '../public/500.html'))
+    res.status(505).sendFile(path.join(__dirname, '../public/500.html'))
 })
 
 

@@ -47,13 +47,14 @@ export class ListPersonPage implements OnInit {
   setPage(pageInfo) {
     this.page.pageNumber = pageInfo.offset;
     this.page.filter = !pageInfo.filter ? '-' : pageInfo.filter;
-    this.personService.getPersons(this.page, '5c9f7a3b9074878158b2e720').subscribe(pagedData => {
+    this.personService.getPersons(this.page, '5cae5bca7a04d16b7c93ef07').subscribe(pagedData => {
       this.page = pagedData.page;
       this.rows = pagedData.data;
     });
   }
 
   async edit(person) {
+    console.log(person);
     const modal = await this.modalController.create({
       component: DialogPersonPage,
       componentProps: { person: person }
@@ -79,7 +80,7 @@ export class ListPersonPage implements OnInit {
         'Cancelar', {
           text: 'Aceptar',
           handler: _ => {
-            this.personService.deletePerson(person._id, '5c9f7a3b9074878158b2e720').subscribe(
+            this.personService.deletePerson(person._id, '5cae5bca7a04d16b7c93ef07').subscribe(
               result => {
                 if (isBoolean(result)) {
                   if (result) {

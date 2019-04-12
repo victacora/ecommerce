@@ -57,7 +57,7 @@
       </ion-item>
       <ion-item *ngFor="let tu of typeUsers">
         <ion-label>{{tu.value}}</ion-label>
-        <ion-checkbox checked="{{isSelectTypeUser(tu.key)}}" (ionChange)="selectTypeUser($event,tu)"></ion-checkbox>
+        <ion-checkbox checked="{{isSelectTypeUser(tu.key)}}"  (ionChange)="selectTypeUser(tu, $event)"></ion-checkbox>
       </ion-item>
     </ion-item-group>
     <div class="center">

@@ -1,4 +1,5 @@
 let mongoose = require('mongoose')
+let ObjectId = mongoose.Schema.Types.ObjectId;
 let mongoConstants = require('../shared/resources/mongo-constants')
 let connectionString = `mongodb+srv://${mongoConstants.USER}:${mongoConstants.PASSWORD}@${mongoConstants.SERVER}/${mongoConstants.DATABASE}?retryWrites=true`;
 

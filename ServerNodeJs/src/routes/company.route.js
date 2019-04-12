@@ -1,6 +1,6 @@
 let express = require('express')
 let router = express.Router()
-let CompanyModel = require('../model/inventory.model')
+let inventoryModel = require('../model/inventory.model')
 
 router.get('/api/company/:page_no/:page_size/:filter', (req, resp) => {
 
@@ -25,9 +25,9 @@ router.get('/api/company/:page_no/:page_size/:filter', (req, resp) => {
     } : {};
 
 
-    CompanyModel.countDocuments(filterCondition).then(
+    inventoryModel.CompanyModel.countDocuments(filterCondition).then(
         totalResult => {
-            CompanyModel.find(filterCondition).limit(per_page).skip((per_page * page_no)).exec()
+            inventoryModel.CompanyModel.find(filterCondition).limit(per_page).skip((per_page * page_no)).exec()
                 .then(companies => {
                     const page = {
                         totalElements: totalResult,
@@ -55,7 +55,7 @@ router.post('/api/company/', (req, resp) => {
         return res.status(400).send('Request body is missing')
     }
 
-    CompanyModel.create(req.body)
+    inventoryModel.CompanyModel.create(req.body)
         .then(company => {
             if (!company || company.length === 0) {
                 return resp.status(500).send(company)
@@ -73,7 +73,7 @@ router.put('/api/company/', (req, resp) => {
         return res.status(400).send('Request body is missing')
     }
 
-    CompanyModel.updateOne({
+    inventoryModel.CompanyModel.updateOne({
             _id: req.body._id
         }, req.body)
         .then(company => {
@@ -90,7 +90,7 @@ router.delete('/api/company/:id', (req, resp) => {
     if (!req.params.id) {
         return res.status(400).send('Missing URL parameter: id')
     }
-    CompanyModel.deleteOne({
+    inventoryModel.CompanyModel.deleteOne({
             _id: req.params.id
         })
         .then(result => {

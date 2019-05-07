@@ -14,6 +14,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderProvider } from './shared/service/loader.service';
 import { HttpInterceptor } from './shared/service/http-interceptor.service';
 import { PersonService } from './shared/service/person.service';
+import { SessionService } from './shared/service/session.service';
+import { IonicStorageModule } from '@ionic/storage';
+import { AuthenticationService } from './shared/service/authentication.service';
+import { AuthGuard } from './shared/service/auth.guard';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,6 +28,7 @@ import { PersonService } from './shared/service/person.service';
     FormsModule,
     ReactiveFormsModule,
     IonicModule.forRoot(),
+    IonicStorageModule.forRoot(),
     AppRoutingModule
   ],
   providers: [
@@ -33,7 +38,10 @@ import { PersonService } from './shared/service/person.service';
     CompanyService,
     PersonService,
     LoaderProvider,
-    HttpInterceptor
+    HttpInterceptor,
+    SessionService,
+    AuthenticationService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

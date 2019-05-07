@@ -6,6 +6,7 @@ import { CompanyService } from 'src/app/shared/service/company.service';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { DialogCompanyPage } from '../dialog/dialog-company.page';
 import { isBoolean } from 'util';
+import { SessionService } from 'src/app/shared/service/session.service';
 
 @Component({
   selector: 'app-list-company',
@@ -21,13 +22,20 @@ export class ListCompanyPage implements OnInit {
 
   filter = '';
 
+  activateCompany: Company;
+
   @ViewChild(DatatableComponent) table: DatatableComponent;
 
   constructor(private companyService: CompanyService,
     private modalController: ModalController,
     public alertController: AlertController,
-    public toastController: ToastController) {
+    public toastController: ToastController,
+    public sessionService: SessionService) {
     this.page = new Page();
+    this.sessionService.getActivateCompany().then(
+      result => {
+        this.activateCompany = JSON.parse(result);
+      });
   }
 
   updateFilter() {
@@ -119,6 +127,19 @@ export class ListCompanyPage implements OnInit {
       }
     });
     return await modal.present();
+  }
+
+  isSelectCompany(row) {
+
+    return !!this.activateCompany && this.activateCompany._id === row._id;
+  }
+
+  selectCompany(row, event) {
+    if (event.currentTarget.checked) {
+      this.sessionService.setActivateCompany(row);
+    } else {
+      this.sessionService.removeActivateCompany();
+    }
   }
 
 }

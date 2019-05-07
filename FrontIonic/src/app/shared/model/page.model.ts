@@ -7,6 +7,6 @@ export class Page {
 
     constructor() {
         this.pageNumber = 0;
-        this.size = 10;
+        this.size = 5;
     }
 }

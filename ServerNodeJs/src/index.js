@@ -1,7 +1,10 @@
 let express = require('express')
 let path = require('path')
 let bodyParser = require('body-parser')
-var cors = require('cors');
+let cors = require('cors');
+let jwt = require('express-jwt');
+let jwtAuthz = require('express-jwt-authz');
+let jwksRsa = require('jwks-rsa');
 
 let app = express()
 app.use(bodyParser.json())
@@ -9,6 +12,9 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(cors()); 
+
+
+
 
 let companyRoute = require('./routes/company.route')
 let personRoute = require('./routes/person.route')

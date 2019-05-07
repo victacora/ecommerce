@@ -7,6 +7,9 @@ import { isBoolean } from 'util';
 import { DialogPersonPage } from '../dialog/dialog-person.page';
 import { Person } from 'src/app/shared/model/person.model';
 import { PersonService } from 'src/app/shared/service/person.service';
+import { SessionService } from 'src/app/shared/service/session.service';
+import { Company } from 'src/app/shared/model/company.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-person',
@@ -14,7 +17,7 @@ import { PersonService } from 'src/app/shared/service/person.service';
   styleUrls: ['list-person.page.scss']
 })
 
-export class ListPersonPage implements OnInit {
+export class ListPersonPage {
 
   rows = new Array<Person>();
 
@@ -22,13 +25,27 @@ export class ListPersonPage implements OnInit {
 
   filter = '';
 
+  company: Company;
+
   @ViewChild(DatatableComponent) table: DatatableComponent;
 
   constructor(private personService: PersonService,
     private modalController: ModalController,
     public alertController: AlertController,
-    public toastController: ToastController) {
+    public toastController: ToastController,
+    public sessionService: SessionService,
+    private router: Router) {
     this.page = new Page();
+    this.sessionService.getActivateCompany().then(
+      result => {
+        this.company = JSON.parse(result);
+        if (!this.company) {
+          this.showCompanySelectionError();
+          this.router.navigate(['company']);
+        } else {
+          this.setPage({ offset: 0, filter: '-' });
+        }
+      });
   }
 
   updateFilter() {
@@ -40,21 +57,18 @@ export class ListPersonPage implements OnInit {
     this.setPage({ offset: 0, filter: '-' });
   }
 
-  ngOnInit() {
-    this.setPage({ offset: 0, filter: '-' });
-  }
-
   setPage(pageInfo) {
-    this.page.pageNumber = pageInfo.offset;
-    this.page.filter = !pageInfo.filter ? '-' : pageInfo.filter;
-    this.personService.getPersons(this.page, '5cae5bca7a04d16b7c93ef07').subscribe(pagedData => {
-      this.page = pagedData.page;
-      this.rows = pagedData.data;
-    });
+    if (this.company) {
+      this.page.pageNumber = pageInfo.offset;
+      this.page.filter = !pageInfo.filter ? '-' : pageInfo.filter;
+      this.personService.getPersons(this.page, this.company._id).subscribe(pagedData => {
+        this.page = pagedData.page;
+        this.rows = pagedData.data;
+      });
+    }
   }
 
   async edit(person) {
-    console.log(person);
     const modal = await this.modalController.create({
       component: DialogPersonPage,
       componentProps: { person: person }
@@ -80,7 +94,7 @@ export class ListPersonPage implements OnInit {
         'Cancelar', {
           text: 'Aceptar',
           handler: _ => {
-            this.personService.deletePerson(person._id, '5cae5bca7a04d16b7c93ef07').subscribe(
+            this.personService.deletePerson(person._id, this.company._id).subscribe(
               result => {
                 if (isBoolean(result)) {
                   if (result) {
@@ -99,6 +113,17 @@ export class ListPersonPage implements OnInit {
   async showOperationResult(result) {
     const toast = await this.toastController.create({
       message: result ? 'Operación realizada con éxito' : 'Ocurrió un error procesando la petición',
+      showCloseButton: true,
+      duration: 1500,
+      position: 'top',
+      closeButtonText: 'Aceptar'
+    });
+    toast.present();
+  }
+
+  async showCompanySelectionError() {
+    const toast = await this.toastController.create({
+      message: 'Debe seleccionar una empresa como activa para gestionar personas',
       showCloseButton: true,
       duration: 1500,
       position: 'top',

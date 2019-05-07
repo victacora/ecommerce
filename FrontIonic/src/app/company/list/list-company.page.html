@@ -1,31 +1,35 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title>
       Empresas
     </ion-title>
-    <ion-buttons slot="primary">
-      <ion-button color="primary" fill="solid" expand="block" (click)="create()">
-        <ion-icon slot="start" name="add"></ion-icon>
-        Agregar
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-item class="searchbar-input-container sc-ion-searchbar-md">
-    <ion-input  [(ngModel)]="filter"
-      placeholder="Buscar por nombre o NIT..." type="text"></ion-input>
+    <ion-input [(ngModel)]="filter" placeholder="Buscar por nombre o NIT..." type="text"></ion-input>
     <ion-button (click)="updateFilter()" end>
       <ion-icon name="search"></ion-icon>
     </ion-button>
     <ion-button (click)="clearFilter()" end>
-        <ion-icon name="ios-refresh"></ion-icon>
-      </ion-button>
+      <ion-icon name="ios-refresh"></ion-icon>
+    </ion-button>
+    <ion-button (click)="create()">
+      <ion-icon name="add"></ion-icon>
+    </ion-button>
   </ion-item>
   <ngx-datatable #table class='material' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
     [rowHeight]="'auto'" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size" [rows]='rows'
     [externalPaging]="true" (page)='setPage($event)'>
+    <ngx-datatable-column name="Empresa activa" sortable="false" prop="id_">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <ion-checkbox checked="{{isSelectCompany(row)}}" (ionChange)="selectCompany(row, $event)"></ion-checkbox>
+      </ng-template>
+    </ngx-datatable-column>
     <ngx-datatable-column name="Nombre" prop="name" sortable="true"></ngx-datatable-column>
     <ngx-datatable-column name="Nit" prop="nit" sortable="true"></ngx-datatable-column>
     <ngx-datatable-column name="Dirección" prop="street" sortable="true"></ngx-datatable-column>

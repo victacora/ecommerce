@@ -123,9 +123,7 @@ router.post('/api/person/', (req, resp) => {
     if (!req.body) {
         return res.status(400).send('Request body is missing')
     }
-    console.log(req.body.person)
-
-    inventoryModel.CompanyModel.findOneAndUpdate({ _id: req.body.id_company }, { $push: { persons: req.body.person } })
+      inventoryModel.CompanyModel.findOneAndUpdate({ _id: req.body.id_company }, { $push: { persons: req.body.person } })
         .then(company => {
             if (!company || company.length === 0) {
                 return resp.status(500).send(company)
@@ -143,7 +141,6 @@ router.put('/api/person/', (req, resp) => {
         return res.status(400).send('Request body is missing')
     }
 
-    console.log(req.body)
     inventoryModel.CompanyModel.findOneAndUpdate(
         { _id: req.body.id_company, 'persons._id': req.body.person._id },
         { 

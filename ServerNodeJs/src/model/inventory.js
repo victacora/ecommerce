@@ -1,7 +1,7 @@
-let mongoose = require('mongoose')
-let ObjectId = mongoose.Schema.Types.ObjectId;
-let mongoConstants = require('../shared/resources/mongo-constants')
-let connectionString = `mongodb+srv://${mongoConstants.USER}:${mongoConstants.PASSWORD}@${mongoConstants.SERVER}/${mongoConstants.DATABASE}?retryWrites=true`;
+import mongoose from 'mongoose';
+import { constants } from './constants';
+
+const connectionString = `mongodb+srv://${constants.MONGO_USER}:${constants.MONGO_PASSWORD}@${constants.MONGO_SERVER}/${constants.MONGO_DATABASE}?retryWrites=true`;
 
 mongoose.connect(connectionString, {
   useNewUrlParser: true,
@@ -9,14 +9,14 @@ mongoose.connect(connectionString, {
   useCreateIndex: true
 });
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.on('error', console.error.bind(console, 'MongoDB connection error: conn '+connectionString));
 db.once('open', function () {
   console.info('MongoDB connect success')
 });
 
-let PersonSchema = new mongoose.Schema({
+const PersonSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -60,7 +60,7 @@ let PersonSchema = new mongoose.Schema({
   }
 })
 
-let CompanySchema = new mongoose.Schema({
+const CompanySchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -89,6 +89,6 @@ let CompanySchema = new mongoose.Schema({
   }
 })
 
-module.exports = {
-  CompanyModel: mongoose.model('Company', CompanySchema)
-}
+export default { 
+  CompanyModel: mongoose.model('Company', CompanySchema) 
+};

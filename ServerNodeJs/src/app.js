@@ -1,24 +1,19 @@
-let express = require('express')
-let path = require('path')
-let bodyParser = require('body-parser')
-let cors = require('cors');
-let jwt = require('express-jwt');
-let jwtAuthz = require('express-jwt-authz');
-let jwksRsa = require('jwks-rsa');
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import path from 'path';
+import authRoute from './routes/auth';
+import companyRoute from './routes/company';
+import personRoute from './routes/person';
 
 let app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(cors()); 
 
-
-
-
-let companyRoute = require('./routes/company.route')
-let personRoute = require('./routes/person.route')
-
+app.use(cors());
+app.use(authRoute)
 app.use(companyRoute)
 app.use(personRoute)
 
